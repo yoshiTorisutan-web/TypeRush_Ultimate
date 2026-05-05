@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>TypeRush Ultimate</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,400&family=Bebas+Neue&family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ── HEADER ────────────────────────────────────────────── -->
+  <header>
+    <div class="logo">TypeRush<sup>Ultimate</sup></div>
+    <div class="theme-picker">
+      <span class="theme-picker-label">Couleur du jeu</span>
+      <div class="theme-pills" id="theme-pills">
+        <div class="theme-pill active" data-t="dark"   onclick="setTheme('dark')"   title="Dark"></div>
+        <div class="theme-pill"        data-t="amber"  onclick="setTheme('amber')"  title="Amber"></div>
+        <div class="theme-pill"        data-t="hacker" onclick="setTheme('hacker')" title="Hacker"></div>
+        <div class="theme-pill"        data-t="pastel" onclick="setTheme('pastel')" title="Pastel"></div>
+        <div class="theme-pill"        data-t="light"  onclick="setTheme('light')"  title="Light"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── TABS ──────────────────────────────────────────────── -->
+  <div class="tabs">
+    <button class="tab active" data-tab="solo"  onclick="switchTab('solo')">Solo</button>
+    <button class="tab"        data-tab="multi" onclick="switchTab('multi')">⚔ Multijoueur local</button>
+    <button class="tab"        data-tab="stats" onclick="switchTab('stats')">📊 Statistiques</button>
+  </div>
+
+  <!-- ══ TAB SOLO ══════════════════════════════════════════════ -->
+  <div id="tab-solo">
+
+    <!-- Config : une ligne par option -->
+    <div class="config-block">
+      <div class="cfg-line">
+        <span class="cfg-label">Mode</span>
+        <div class="cfg-group" id="mode-group">
+          <button class="cfg-btn active" data-v="words"    onclick="setMode('words')">Mots FR</button>
+          <button class="cfg-btn"        data-v="words-en" onclick="setMode('words-en')">Mots EN</button>
+          <button class="cfg-btn"        data-v="quote"    onclick="setMode('quote')">Citations</button>
+          <button class="cfg-btn"        data-v="code"     onclick="setMode('code')">Code</button>
+          <button class="cfg-btn"        data-v="numbers"  onclick="setMode('numbers')">Chiffres</button>
+          <button class="cfg-btn"        data-v="custom"   onclick="setMode('custom')">Custom</button>
+        </div>
+      </div>
+      <div class="cfg-line">
+        <span class="cfg-label">Type</span>
+        <div class="cfg-group" id="gametype-group">
+          <button class="cfg-btn active" data-v="timed"    onclick="setGameType('timed')">Chrono</button>
+          <button class="cfg-btn"        data-v="zen"      onclick="setGameType('zen')">Zen</button>
+          <button class="cfg-btn"        data-v="sudden"   onclick="setGameType('sudden')">Sudden Death</button>
+          <button class="cfg-btn"        data-v="marathon" onclick="setGameType('marathon')">Marathon</button>
+        </div>
+      </div>
+      <div class="cfg-line">
+        <span class="cfg-label">Durée</span>
+        <div class="cfg-group" id="time-group">
+          <button class="cfg-btn active" data-v="15"  onclick="setTime(15)">15s</button>
+          <button class="cfg-btn"        data-v="30"  onclick="setTime(30)">30s</button>
+          <button class="cfg-btn"        data-v="60"  onclick="setTime(60)">60s</button>
+          <button class="cfg-btn"        data-v="120" onclick="setTime(120)">2min</button>
+        </div>
+      </div>
+      <div class="cfg-line">
+        <span class="cfg-label">Son</span>
+        <div class="cfg-group" id="sound-group">
+          <button class="cfg-btn active" data-v="off"   onclick="setSound('off')">🔇 Off</button>
+          <button class="cfg-btn"        data-v="mech"  onclick="setSound('mech')">⌨ Méca</button>
+          <button class="cfg-btn"        data-v="soft"  onclick="setSound('soft')">🎵 Soft</button>
+          <button class="cfg-btn"        data-v="retro" onclick="setSound('retro')">👾 Rétro</button>
+        </div>
+        <button class="new-btn" onclick="newGame()">↺ Nouveau</button>
+      </div>
+    </div>
+
+    <!-- Texte custom -->
+    <div class="custom-wrap" id="custom-wrap">
+      <textarea class="custom-textarea" id="custom-text"
+        placeholder="Colle ton texte ici, puis lance une partie…"
+        oninput="onCustomInput()"></textarea>
+    </div>
+
+    <!-- Graphique WPM live -->
+    <div class="wpm-graph-wrap">
+      <canvas id="wpm-canvas"></canvas>
+    </div>
+
+    <!-- Stats live -->
+    <div class="live-stats">
+      <div class="lstat"><div class="lstat-label">WPM</div><div class="lstat-val ok" id="sv-wpm">—</div></div>
+      <div class="lstat"><div class="lstat-label">Précision</div><div class="lstat-val" id="sv-acc">—</div></div>
+      <div class="lstat"><div class="lstat-label">Erreurs</div><div class="lstat-val err" id="sv-err">0</div></div>
+      <div class="lstat"><div class="lstat-label">Chars</div><div class="lstat-val accent" id="sv-chars">0</div></div>
+      <div class="lstat"><div class="lstat-label">Temps</div><div class="lstat-val warn" id="sv-time">—</div></div>
+    </div>
+
+    <!-- Barre de progression -->
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progress"></div>
+    </div>
+
+    <!-- Zone de frappe -->
+    <div class="typing-card" onclick="focusInput()">
+      <div class="ring-wrap" id="ring-wrap">
+        <svg class="ring-svg" width="44" height="44" viewBox="0 0 44 44">
+          <circle class="ring-bg" cx="22" cy="22" r="19"/>
+          <circle class="ring-fg" id="ring-fg" cx="22" cy="22" r="19"/>
+        </svg>
+      </div>
+      <div class="text-display" id="text-display"></div>
+      <div class="input-row">
+        <input type="text" class="typing-input" id="typing-input"
+          placeholder="Commence à taper…"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          oninput="onInput()" onkeydown="onKeydown(event)"/>
+      </div>
+      <div class="overlay" id="overlay" onclick="focusInput()">
+        <div class="overlay-inner">
+          <span class="overlay-icon">⌨</span>
+          <div class="overlay-text">Clique ou appuie sur une touche</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résultats -->
+    <div class="results" id="results">
+      <div class="record-badge" id="record-badge">🏆 Nouveau record !</div>
+      <div class="res-top">
+        <div class="res-wpm-block">
+          <div class="res-wpm" id="res-wpm">0</div>
+          <div class="res-wpm-label">mots par minute</div>
+        </div>
+        <div class="res-grid">
+          <div class="res-stat"><div class="res-stat-val" id="res-acc">0%</div><div class="res-stat-label">Précision</div></div>
+          <div class="res-stat"><div class="res-stat-val" id="res-chars">0</div><div class="res-stat-label">Chars corrects</div></div>
+          <div class="res-stat"><div class="res-stat-val" id="res-errs">0</div><div class="res-stat-label">Erreurs</div></div>
+          <div class="res-stat"><div class="res-stat-val" id="res-time">0s</div><div class="res-stat-label">Durée</div></div>
+        </div>
+      </div>
+      <div class="res-chart-wrap">
+        <div class="res-chart-title">Courbe WPM</div>
+        <canvas id="wpm-result-chart" height="70"></canvas>
+      </div>
+      <div class="heatmap-wrap">
+        <div class="heatmap-title">Touches problématiques</div>
+        <div class="keyboard" id="keyboard"></div>
+      </div>
+      <div style="margin-top:1.25rem"></div>
+      <div class="res-actions">
+        <button class="btn-primary"   onclick="newGame()">↺ Rejouer</button>
+        <button class="btn-secondary" onclick="newText()">Nouveau texte</button>
+      </div>
+    </div>
+
+    <!-- Historique -->
+    <div class="history-section">
+      <div class="section-title">Historique</div>
+      <div class="history-grid" id="history-grid"></div>
+    </div>
+
+  </div><!-- #tab-solo -->
+
+  <!-- ══ TAB MULTIJOUEUR ═══════════════════════════════════════ -->
+  <div id="tab-multi" style="display:none">
+    <div class="multi-controls">
+      <button class="new-btn" style="padding:8px 20px" onclick="startMulti()">▶ Démarrer la partie</button>
+      <button class="btn-secondary" onclick="resetMulti()">↺ Reset</button>
+      <span class="multi-hint">Joueur 1 : champ gauche · Joueur 2 : champ droit</span>
+    </div>
+    <div class="multi-layout" id="multi-layout">
+      <div class="player-card" id="p1-card">
+        <div class="player-label">Joueur 1</div>
+        <div class="player-wpm" id="p1-wpm">0 WPM</div>
+        <div class="player-progress"><div class="player-progress-fill" id="p1-prog"></div></div>
+        <div class="player-text" id="p1-text"></div>
+        <input class="player-input" id="p1-input" type="text"
+          placeholder="Joueur 1 — commence à taper…"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          oninput="onMultiInput(1)" disabled/>
+      </div>
+      <div class="player-card" id="p2-card">
+        <div class="player-label">Joueur 2</div>
+        <div class="player-wpm" id="p2-wpm">0 WPM</div>
+        <div class="player-progress"><div class="player-progress-fill" id="p2-prog"></div></div>
+        <div class="player-text" id="p2-text"></div>
+        <input class="player-input" id="p2-input" type="text"
+          placeholder="Joueur 2 — commence à taper…"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          oninput="onMultiInput(2)" disabled/>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAB STATISTIQUES ══════════════════════════════════════ -->
+  <div id="tab-stats" style="display:none">
+    <div class="progress-chart-wrap">
+      <div class="progress-chart-title">Progression WPM (sessions)</div>
+      <canvas id="progress-chart" height="80"></canvas>
+    </div>
+    <div class="global-stats-grid" id="global-stats"></div>
+    <div class="history-section" style="margin-top:1.5rem">
+      <div class="section-title">Top 10</div>
+      <div class="history-grid" id="top-grid"></div>
+    </div>
+  </div>
+
+</div><!-- .wrap -->
+
+<!-- Confetti & flash -->
+<canvas id="confetti-canvas"></canvas>
+<div class="death-flash" id="death-flash"></div>
+
+<!-- Script -->
+<script src="app.js"></script>
+</body>
+</html>

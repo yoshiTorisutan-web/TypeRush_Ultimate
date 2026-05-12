@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Define color modes -->
+  <defs>
+    <style>
+      @media (prefers-color-scheme: dark) {
+        .bg { fill: #1a1a2e; }
+        .primary { fill: #7c6af7; }
+        .accent { fill: #4ade80; }
+      }
+      @media (prefers-color-scheme: light) {
+        .bg { fill: #f5f5f5; }
+        .primary { fill: #6d28d9; }
+        .accent { fill: #16a34a; }
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="128" height="128" class="bg"/>
+
+  <!-- Lightning bolt (main icon) -->
+  <g transform="translate(64, 64)">
+    <!-- Outer glow -->
+    <circle cx="0" cy="0" r="45" fill="none" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+    
+    <!-- Lightning bolt shape -->
+    <path class="primary" d="M 0,-35 L 12,-8 L 0,8 L 15,35 L -15,12 L 0,-5 Z" />
+    
+    <!-- Accent highlight -->
+    <path class="accent" d="M 0,-35 L 8,-12 L 0,4 L 8,20 Z" opacity="0.8"/>
+  </g>
+
+  <!-- Corner accent for typing theme -->
+  <circle cx="110" cy="18" r="6" class="accent" opacity="0.6"/>
+</svg>

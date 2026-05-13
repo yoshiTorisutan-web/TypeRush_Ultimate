@@ -328,8 +328,8 @@ header{
 .progress-chart-title{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:.75rem;text-align:center}
 
 /* ══ MULTIPLAY ═══════════════════════════════════════════════ */
-.multi-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.player-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:relative}
+.multi-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px;overflow:hidden}
+.player-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:relative;min-width:0}
 .player-card.winner::after{
   content:'🏆 Gagnant!';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
   background:var(--warn);color:#000;font-weight:700;font-size:11px;
@@ -358,4 +358,9 @@ header{
 /* ── global stats grid (stats tab) ── */
 .global-stats-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:1rem;
+}
+
+@media(max-width:600px){
+  .multi-layout{grid-template-columns:1fr}
+  .wrap{padding:0 .5rem}
 }

@@ -190,7 +190,10 @@ function updateChars() {
 // ═══════════════════════════════════════════════════════════
 //  GAME FLOW
 // ═══════════════════════════════════════════════════════════
-function focusInput() { document.getElementById("typing-input").focus(); }
+function focusInput() {
+  document.getElementById("typing-input").focus();
+  document.getElementById("overlay").classList.add("gone");
+}
 
 function onKeydown(e) {
   if(e.key==="Escape"){ newGame(); return; }
@@ -200,20 +203,22 @@ function onKeydown(e) {
 function onInput() {
   const inp = document.getElementById("typing-input");
   const val = inp.value;
-  if (!val.length) return;
 
-  if (!S.started) startGame();
   if (S.finished) { inp.value=""; return; }
 
-  // backspace
+  // Backspace (single or multiple chars deleted, including clear-all)
   if (val.length < S.typed.length) {
-    S.typed.pop();
-    S.charIndex = Math.max(0, S.charIndex-1);
+    S.typed.length = val.length;
+    S.charIndex = val.length;
     updateChars(); updateLive(); updateProgress();
     return;
   }
 
-  const ch = val[val.length-1];
+  if (!val.length) return;
+
+  if (!S.started) startGame();
+
+  const ch = val[val.length-1].replace(/ /g, ' ');
   S.typed.push(ch);
   const expected = S.chars[S.charIndex];
 

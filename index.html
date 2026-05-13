@@ -116,7 +116,7 @@
     </div>
 
     <!-- Zone de frappe -->
-    <div class="typing-card" onclick="focusInput()">
+    <div class="typing-card">
       <div class="ring-wrap" id="ring-wrap">
         <svg class="ring-svg" width="44" height="44" viewBox="0 0 44 44">
           <circle class="ring-bg" cx="22" cy="22" r="19"/>
@@ -128,7 +128,8 @@
         <input type="text" class="typing-input" id="typing-input"
           placeholder="Commence à taper…"
           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-          oninput="onInput()" onkeydown="onKeydown(event)"/>
+          autofocus
+          oninput="onInput()" onkeydown="onKeydown(event)" onpaste="return false"/>
       </div>
       <div class="overlay" id="overlay" onclick="focusInput()">
         <div class="overlay-inner">

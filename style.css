@@ -360,7 +360,57 @@ header{
   display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:1rem;
 }
 
+/* ══ RESPONSIVE MOBILE ══════════════════════════════════════ */
 @media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  .wrap{padding:0}
+
+  header{margin-bottom:1rem}
+
+  /* tabs — texte plus petit pour tenir sur 3 colonnes */
+  .tab{font-size:11px;padding:6px 4px;letter-spacing:0}
+
+  /* config — label sur sa propre ligne, boutons avec retour à la ligne */
+  .config-block{margin-bottom:1.25rem}
+  .cfg-line{flex-wrap:wrap;gap:4px 8px;justify-content:center}
+  .cfg-label{min-width:100%;text-align:center}
+  .cfg-group{flex-wrap:wrap;gap:3px;justify-content:center}
+  .cfg-btn{padding:6px 10px;font-size:11px}
+
+  /* stats live — 3 colonnes au lieu de 5 */
+  .live-stats{grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:.75rem}
+  .lstat{padding:.55rem .5rem}
+  .lstat-val{font-size:18px}
+  .lstat-label{font-size:8px}
+
+  /* zone de frappe */
+  .typing-card{padding:1.25rem 1rem 1rem}
+  /* 16px minimum évite le zoom automatique iOS sur focus */
+  .typing-input{font-size:16px;padding:10px 12px}
+
+  /* résultats */
+  .res-top{gap:1rem}
+  .res-wpm-block{min-width:unset}
+  .res-grid{min-width:unset;width:100%}
+  .res-stat-val{font-size:17px}
+
+  /* heatmap — touches réduites pour tenir en ~350px (10×26 + 9×3 = 287px) */
+  .key{width:26px;height:26px;font-size:9px;border-radius:4px}
+  .key.wide,.key.wider,.key.widest{width:26px}
+  .key-count{font-size:7px;min-width:12px}
+  .kb-row{gap:3px}
+  .keyboard{gap:3px}
+
+  /* historique — 4 colonnes, rang et mode cachés */
+  .hrow{grid-template-columns:1fr auto auto auto;gap:5px;padding:7px 10px;font-size:11px}
+  .hrow-rank,.hrow-mode{display:none}
+  .hrow-wpm{font-size:17px}
+
+  /* onglet statistiques */
+  .global-stats-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* multijoueur */
   .multi-layout{grid-template-columns:1fr}
-  .wrap{padding:0 .5rem}
+  .multi-hint{display:none}
+  .player-input{font-size:16px}
 }
